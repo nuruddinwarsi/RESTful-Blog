@@ -1,0 +1,36 @@
+<% include partials/header %>
+
+    <div class="ui main text container segment">
+        <div class="ui huge header">
+        <!-- blog is recieved from {blog:foundBlog} in SHOW route--> 
+            <%= blog.title%>
+        </div>
+        <div class="ui top attached">
+            <div class="item">
+                <img src="<%=blog.image%>" class="ui centered rounded image">
+            </div>
+            <div class="description">
+                <!--<p><%=blog.body%></p>-->
+                <!--Changing <%= %> to <%- %> would evaluate it as a code so that if we write <strong> tag 
+                it would actually change it to a strong -->
+                <p><%- blog.body%></p>
+                <!--But this can allow users to add script tags which can run javascript-->
+            </div>
+        </div>
+        <p><%=blog.created.toDateString()%></p>
+        <form action="/blogs/<%= blog._id%>/?_method=DELETE" method="POST">
+        <div class="ui buttons">
+            <a href="/blogs/<%= blog._id%>/edit" class="ui inverted primary button">
+                <i class="large edit outline icon"></i>EDIT
+            </a>
+
+            <div class="or"></div>
+
+            <button class="ui inverted red button">
+                <i class="large trash alternate outline icon"></i>DELETE
+            </button>            
+        </div>
+        </form>
+    </div>
+
+<% include partials/footer%>

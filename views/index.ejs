@@ -1,0 +1,15 @@
+<% include partials/header%>
+
+<%blogs.forEach(function(blog){ %>
+    <div class="main container">
+        <h2><%= blog.title%></h2>
+        <img src="<%= blog.image%>" alt="">
+        <!--substring(0,100) will show upto the first 100 characters -->
+        <p><%= blog.body.substring(0,100)%></p>
+        <a href="/blogs/<%=blog._id%>">Read more</a>
+        <p><%= blog.created%></p>
+    </div>
+<% }); %>
+
+<% include partials/footer%>
+
