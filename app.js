@@ -4,7 +4,11 @@ var mongoose = require("mongoose");
 var express = require("express");
 var app = express();
 
-// app config
+var methodOverride = require("method-override");
+
+var expressSanitizer = require("express-sanitizer");
+
+// APP CONFIG
 mongoose.connect("mongodb://localhost:27017/restful_blog_app", {
     useNewUrlParser: true
 });
@@ -13,9 +17,11 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-// method override
-var methodOverride = require("method-override");
+
 app.use(methodOverride("_method")); //argument tells app.js what to look for : ours is _method
+
+//To restrict users from using script tag in ejs tag <%- %> 
+app.use(expressSanitizer()); //should go after bodyparser
 
 
 // MONGOOSE/ MODEL config
@@ -61,7 +67,12 @@ app.get("/blogs/new", function (req, res) {
 
 // CREATE route
 app.post("/blogs", function (req, res) {
-    // create blog
+    // CREATE Blog
+
+    // req.body : Data retrieved from the form
+    // blog.body : blog[body] in new.ejs form
+    req.body.blog.body = req.sanitize(req.body.blog.body); //sanitizes it meaning wont allow the user to use script tag 
+
     Blog.create(req.body.blog, function (error, newBlog) {
         if (error) {
             alert("Failed to created new Blog");
@@ -103,6 +114,9 @@ app.get("/blogs/:id/edit", function (req, res) {
 
 // UPDATE  route
 app.put("/blogs/:id", function (req, res) {
+
+    req.body.blog.body = sanitize(req.body.blog.body);
+
     // Blog.findByIdAndUpdate(id,newData, callback)
     Blog.findByIdAndUpdate(req.params.id, req.body.blog, function (error, updatedBlog) {
         if (error) {

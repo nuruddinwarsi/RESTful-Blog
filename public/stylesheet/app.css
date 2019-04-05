@@ -1,4 +1,5 @@
-i.icon {
+/* for aligning only the Code icon in the navbar */
+div.header i.icon {
     font-size: 2em;
 }
 
